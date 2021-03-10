@@ -3,7 +3,6 @@ import random
 sys.path.append('..')
 from common import board
 
-
 def pieces_difference(color,the_board):
     player_count = the_board.piece_count[color]      
     opponent_count = the_board.piece_count[the_board.opponent(color)]
@@ -17,33 +16,34 @@ def mobility(color,the_board):
 	    return_score=(100 * (player_moves - opponent_moves) / (player_moves + opponent_moves))
 	return return_score
 
+
 def heuristic(color,the_board):
     mobility(color,the_board)
     #pieces_difference(color,the_board)
 
 
-def minimax_ab(color,the_board):
-    v_max = max_value(color, float('-inf') , float('inf') , actual_the_board)
+def minimax_ab(color,the_board,ply=4):
+    v_max = max_value(color, float('-inf') , float('inf') , actual_the_board,ply-1)
     moves=the_board.legal_moves(color)
     bestscore  = float('-inf')
     return_move=moves[0]
     for move in moves:
         newboard= deepcopy(the_board)
         newboard.process_move(move, color)
-        score=min_value(newboard.opponent(color),float('-inf'),float('inf'),newboard)
+        score=min_value(newboard.opponent(color),float('-inf'),float('inf'),newboard,ply-1)
         if score>bestscore:
             bestscore=score
             return_move=move
     return return_move
     
-def max_value(color, alpha, beta, the_board):    
-    if len(the_board.legal_moves(color))==0:
-        return heuristic(color,the board)
+def max_value(color, alpha, beta, the_board,ply):    
+    if len(the_board.legal_moves(color))==0 or ply==0:
+        return heuristic(color,the_board)
     bestscore = float('-inf')
     for move in the_board.legal_moves(color):
         newboard= deepcopy(the_board)
         newboard.process_move(move, color)
-        score = min_value(newboard.opponent(color), alpha, beta, newboard)
+        score = min_value(newboard.opponent(color), alpha, beta, newboard,ply-1)
         if score > bestscore:
             bestscore=score
         if bestscore>=beta:
@@ -51,15 +51,15 @@ def max_value(color, alpha, beta, the_board):
         alpha=max(alpha,bestscore)
     return bestscore
 
-def min_value(color, alpha, beta, the_board):
-    if len(the_board.legal_moves(color))==0:
-        return heuristic(color,the board)
+def min_value(color, alpha, beta, the_board,ply):
+    if len(the_board.legal_moves(color))==0 or ply==0:
+        return heuristic(color,the_board)
        
     bestscore = float('inf')
     for move in the_board.legal_moves(color):
         newboard= deepcopy(the_board)
         newboard.process_move(move, color)
-        score = max_value(newboard.opponent(color), alpha, beta, newboard)
+        score = max_value(newboard.opponent(color), alpha, beta, newboard,ply-1)
         if score < bestscore:
             bestscore=score
         if bestscore<=beta:
