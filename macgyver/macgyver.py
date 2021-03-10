@@ -3,6 +3,7 @@ import random
 sys.path.append('..')
 from common import board
 
+the_board = 
 def pieces_difference(color,the_board):
     player_count = the_board.piece_count[color]      
     opponent_count = the_board.piece_count[the_board.opponent(color)]
@@ -13,7 +14,7 @@ def mobility(color,the_board):
     player_moves= the_board.legal_moves(color)
     opponent_moves= the_board.legal_moves(the_board.opponent(color))
     if (player_moves + opponent_moves != 0):
-	    return_score=(100 * (player_moves - opponent_moves) / (player_moves + opponent_moves))
+	    return_score=100 * (player_moves - opponent_moves) / (player_moves + opponent_moves)
 	return return_score
 
 
@@ -23,7 +24,6 @@ def heuristic(color,the_board):
 
 
 def minimax_ab(color,the_board,ply=4):
-    v_max = max_value(color, float('-inf') , float('inf') , actual_the_board,ply-1)
     moves=the_board.legal_moves(color)
     bestscore  = float('-inf')
     return_move=moves[0]
