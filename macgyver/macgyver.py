@@ -17,7 +17,6 @@ def mobility(color,the_board):
 
 def heuristic(color,the_board):
     return mobility(color,the_board)
-    #pieces_difference(color,the_board)
 
 
 def minimax_ab(color,the_board,ply):
@@ -78,5 +77,5 @@ def make_move(the_board, color):
 b = board.from_file("state.txt")
 b.print_board()
 f = open('move.txt', 'w')
-f.write('1%d,%d' % make_move(b, 'white'))
+f.write('%d,%d' % make_move(b, 'white'))
 f.close()
