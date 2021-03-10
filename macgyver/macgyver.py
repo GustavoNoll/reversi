@@ -3,7 +3,6 @@ import random
 sys.path.append('..')
 from common import board
 
-the_board = 
 def pieces_difference(color,the_board):
     player_count = the_board.piece_count[color]      
     opponent_count = the_board.piece_count[the_board.opponent(color)]
