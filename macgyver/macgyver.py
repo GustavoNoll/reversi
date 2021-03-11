@@ -3,8 +3,11 @@ import random
 sys.path.append('..')
 from common import board
 from copy import deepcopy
+import time
 
-ply_alpha=4
+
+ply_alpha=9
+
 WEIGHTS = [4, -3, 2, 2, 2, 2, -3, 4,
                -3, -4, -1, -1, -1, -1, -4, -3,
                2, -1, 1, 0, 0, 1, -1, 2,
@@ -35,9 +38,8 @@ def cornerweight(color, the_board):
     return total
 
 def heuristic(color,the_board):
-    return mobility(color,the_board)
-    #return cornerweight(color,the_board)
-
+    #return mobility(color,the_board)
+    return cornerweight(color,the_board)
 
 def minimax_ab(color,the_board,ply):
     moves=the_board.legal_moves(color)
@@ -93,7 +95,11 @@ def make_move(the_board, color):
     return minimax_ab(color,the_board,ply_alpha) if len(legal_moves) > 0 else (-1, -1)
 
 if __name__ == '__main__':
-    b = board.from_file('state.txt')
+    start_time = time.time()
+
+    b = board.from_file(sys.argv[1])
     f = open('move.txt', 'w')
-    f.write('%d,%d' % make_move(b, 'white'))
+    f.write('%d,%d' % make_move(b, sys.argv[2]))
     f.close()
+
+    print("--- %s seconds ---" % (time.time() - start_time))
