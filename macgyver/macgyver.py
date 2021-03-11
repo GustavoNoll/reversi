@@ -5,6 +5,14 @@ from common import board
 from copy import deepcopy
 
 ply_alpha=4
+WEIGHTS = [4, -3, 2, 2, 2, 2, -3, 4,
+               -3, -4, -1, -1, -1, -1, -4, -3,
+               2, -1, 1, 0, 0, 1, -1, 2,
+               2, -1, 0, 1, 1, 0, -1, 2,
+               2, -1, 0, 1, 1, 0, -1, 2,
+               2, -1, 1, 0, 0, 1, -1, 2,
+               -3, -4, -1, -1, -1, -1, -4, -3,
+               4, -3, 2, 2, 2, 2, -3, 4]
 
 def mobility(color,the_board):
     return_score=0
@@ -15,8 +23,20 @@ def mobility(color,the_board):
     return return_score
 
 
+def cornerweight(color, the_board):
+    total = 0
+    i = 0
+    while i < 64:
+        if the_board.tiles[int(i/8)][int(i%8)] == color:
+            total += WEIGHTS[i]
+        if the_board.tiles[int(i/8)][int(i%8)] == the_board.opponent(color):
+            total -= WEIGHTS[i]
+        i += 1
+    return total
+
 def heuristic(color,the_board):
     return mobility(color,the_board)
+    #return cornerweight(color,the_board)
 
 
 def minimax_ab(color,the_board,ply):
@@ -73,7 +93,7 @@ def make_move(the_board, color):
     return minimax_ab(color,the_board,ply_alpha) if len(legal_moves) > 0 else (-1, -1)
 
 if __name__ == '__main__':
-    b = board.from_file(sys.argv[1])
+    b = board.from_file('state.txt')
     f = open('move.txt', 'w')
-    f.write('%d,%d' % make_move(b, sys.argv[2]))
+    f.write('%d,%d' % make_move(b, 'white'))
     f.close()
